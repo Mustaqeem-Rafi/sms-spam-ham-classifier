@@ -50,7 +50,7 @@ Exact duplicates are removed **before** the stratified 80/20 split, and the vect
 
 Without LibreOffice: open the `.docx` in MS Word → Ctrl+A → F9 (choose "Update entire table") → File → Save As → PDF.
 
-The remaining yellow-highlighted `[FILL: …]` placeholder in the report (guide name and designation) must be completed by the team. **Fill it in the `GUIDE` constant at the top of `report/build_report.py`** (team details live there too) and re-run `python report/build_report.py`; hand edits to the `.docx` are overwritten whenever the report is rebuilt.
+All personal details (team, USNs, guide, HOD, academic year, repository) are set in the constants at the top of `report/build_report.py`; change them there and re-run `python report/build_report.py`, because hand edits to the `.docx` are overwritten whenever the report is rebuilt.
 
 ## Prediction
 

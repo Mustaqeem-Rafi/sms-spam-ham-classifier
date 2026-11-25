@@ -32,7 +32,7 @@ COLLEGE = "B M S Institute of Technology and Management"
 DEPT = "Department of Artificial Intelligence and Machine Learning"
 PROGRAMME = "V Semester Bachelor of Engineering in Artificial Intelligence and Machine Learning"
 YEAR = "2026–2027"
-GUIDE = "[FILL: Guide name and designation]"
+GUIDE = "Dr. Mayuri K P"
 HOD = "Dr. Anupama H S"
 TEAM = [("Javeria Taj", "1BY24AI057"), ("Shaik Mohammed Mustaqeem Rafi", "1BY24AI141"),
         ("Mohammed Mohsin", "1BY25AI418"), ("Varun Kalmane", "1BY24AI184")]
