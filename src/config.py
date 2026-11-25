@@ -19,6 +19,25 @@ DATASET_URL = "https://archive.ics.uci.edu/static/public/228/sms+spam+collection
 DATASET_PAGE = "https://archive.ics.uci.edu/dataset/228/sms+spam+collection"
 DATE_ACCESSED = "25 November 2026"
 
+# Facts copied from the UCI dataset page and the readme inside the zip (accessed 25 Nov 2026).
+# Written to outputs/results/dataset_info.json so the report reads them from outputs/.
+DATASET_INFO = {
+    "name": "SMS Spam Collection",
+    "creators": "Tiago A. Almeida and José María Gómez Hidalgo",
+    "repository": "UCI Machine Learning Repository",
+    "doi": "10.24432/C5CC84",
+    "licence": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "donated": "21 June 2012",
+    "instances_stated": 5574,
+    "composition": [
+        {"source": "Grumbletext Web site (UK forum where users report SMS spam)", "ham": 0, "spam": 425},
+        {"source": "NUS SMS Corpus (National University of Singapore; mostly Singaporean students)", "ham": 3375, "spam": 0},
+        {"source": "Caroline Tagg's PhD thesis (University of Birmingham)", "ham": 450, "spam": 0},
+        {"source": "SMS Spam Corpus v.0.1 Big", "ham": 1002, "spam": 322},
+    ],
+    "readme_totals": {"ham": 4827, "spam": 747},
+}
+
 RANDOM_STATE = 42
 TEST_SIZE = 0.20
 CV_FOLDS = 5

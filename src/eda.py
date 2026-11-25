@@ -134,15 +134,15 @@ def fig_digits(df):
 def fig_top_words(counter, cls, fname, n=20):
     top = counter.most_common(n)
     words, counts = zip(*top)
-    fig, ax = plt.subplots(figsize=(6.0, 4.6))
+    fig, ax = plt.subplots(figsize=(3.5, 4.7))
     y = np.arange(n)[::-1]
     bars = ax.barh(y, counts, color=C.CLASS_PALETTE[cls], height=0.72)
     ax.set_yticks(y, words)
     for b, v in zip(bars, counts):
-        ax.text(b.get_width(), b.get_y() + b.get_height() / 2, f" {v}", va="center", fontsize=8, color=C.INK)
-    ax.set_xlabel("Occurrences (after preprocessing and stop-word removal)")
+        ax.text(b.get_width(), b.get_y() + b.get_height() / 2, f" {v}", va="center", fontsize=7.5, color=C.INK)
+    ax.set_xlabel("Occurrences after preprocessing")
     ax.set_title(f"Top {n} tokens in {cls} messages")
-    ax.set_xlim(0, max(counts) * 1.12)
+    ax.set_xlim(0, max(counts) * 1.2)
     ax.grid(axis="y", visible=False)
     return savefig(fig, fname)
 
@@ -222,8 +222,16 @@ def run_eda():
         ("Task", "Binary text classification"),
         ("File format", "Tab-separated text file (label<TAB>message), no header, UTF-8"),
         ("Missing values", str(log["missing_values"])),
+        ("DOI", C.DATASET_INFO["doi"]),
+        ("Licence", C.DATASET_INFO["licence"]),
         ("Date accessed", C.DATE_ACCESSED),
     ]
+    info = dict(C.DATASET_INFO, date_accessed=C.DATE_ACCESSED, url=C.DATASET_PAGE)
+    comp_ham = sum(c["ham"] for c in info["composition"])
+    comp_spam = sum(c["spam"] for c in info["composition"])
+    info["composition_matches_file"] = (comp_ham == raw_counts["ham"] and comp_spam == raw_counts["spam"])
+    with open(C.RESULTS_DIR / "dataset_info.json", "w") as f:
+        json.dump(info, f, indent=2, ensure_ascii=False)
     pd.DataFrame(overview, columns=["Attribute", "Value"]).to_csv(
         C.TABLE_DIR / "table_3_1_overview.csv", index=False)
 
