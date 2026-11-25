@@ -62,9 +62,16 @@ def inference_ms_per_1000(pipe, X, repeats=7):
     return 1000 * float(np.median(times)) * 1000 / len(X)
 
 
+def precision_at_recall(y, s, min_recall=0.95):
+    """Highest precision achievable with recall >= min_recall (from the PR curve)."""
+    p, r, _ = precision_recall_curve(y, s)
+    return float(p[r >= min_recall].max())
+
+
 def compute_metrics(y, pred, s):
     tn, fp, fn, tp = confusion_matrix(y, pred, labels=[0, 1]).ravel()
     return {
+        "precision_at_recall_95": precision_at_recall(y, s, 0.95),
         "accuracy": accuracy_score(y, pred),
         "precision": precision_score(y, pred, zero_division=0),
         "recall": recall_score(y, pred),
@@ -257,6 +264,14 @@ def run_evaluation():
             f.write(f"{pretty(name)} - classification report on the test set (n={len(y)})\n\n")
             f.write(classification_report(y, pred, target_names=["ham", "spam"], digits=4))
 
+    # Test messages whose *cleaned* text also occurs in the training set (near-duplicates
+    # that survive exact deduplication, e.g. the same template with a different number).
+    from .preprocess import clean_text
+    train_clean = set(X_train.map(clean_text))
+    test_clean = X_test.map(clean_text)
+    near_dup = test_clean.isin(train_clean).to_numpy()
+    near_dups = {"spam": int((near_dup & (y == 1)).sum()), "ham": int((near_dup & (y == 0)).sum())}
+
     order = rank_models(metrics)
     best, second = order[0], order[1]
     cv_order = cv.sort_values("cv_f1_mean", ascending=False)["model"].tolist()
@@ -344,6 +359,7 @@ def run_evaluation():
         "best_params": json.loads(cvm.loc[best, "best_params"]),
         "selection_rule": "Highest test F1 (spam); tie-break by lower FPR, then higher ROC-AUC",
         "mcnemar_top2": mc,
+        "test_cleaned_text_in_train": near_dups,
         "n_errors_best": int(len(err)),
         "n_fp_best": int((err.error_type.str.startswith("FP")).sum()),
         "n_fn_best": int((err.error_type.str.startswith("FN")).sum()),

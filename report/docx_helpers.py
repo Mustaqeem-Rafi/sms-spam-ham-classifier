@@ -103,6 +103,8 @@ def set_cell_margins(table, top=40, bottom=40, left=80, right=80):
 
 def set_pgnum(section, fmt):
     sectpr = section._sectPr
+    for old in sectpr.findall(qn("w:pgNumType")):   # add_section() copies the previous section's settings
+        sectpr.remove(old)
     pg = OxmlElement("w:pgNumType")
     pg.set(qn("w:fmt"), fmt)
     pg.set(qn("w:start"), "1")

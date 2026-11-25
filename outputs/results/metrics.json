@@ -4,6 +4,7 @@
   "n_test_ham": 904,
   "models": {
     "BoW_MultinomialNB": {
+      "precision_at_recall_95": 0.8652482269503546,
       "accuracy": 0.9864341085271318,
       "precision": 0.9453125,
       "recall": 0.9453125,
@@ -17,10 +18,11 @@
       "tn": 897,
       "fp": 7,
       "fn": 7,
-      "inference_ms_per_1000": 9.005370165416322,
+      "inference_ms_per_1000": 9.071463159494852,
       "score_type": "P(spam)"
     },
     "BoW_LogisticRegression": {
+      "precision_at_recall_95": 0.9838709677419355,
       "accuracy": 0.9922480620155039,
       "precision": 0.9838709677419355,
       "recall": 0.953125,
@@ -34,10 +36,11 @@
       "tn": 902,
       "fp": 2,
       "fn": 6,
-      "inference_ms_per_1000": 9.039849856897265,
+      "inference_ms_per_1000": 9.103076574897985,
       "score_type": "P(spam)"
     },
     "BoW_LinearSVM": {
+      "precision_at_recall_95": 0.9838709677419355,
       "accuracy": 0.9903100775193798,
       "precision": 0.9836065573770492,
       "recall": 0.9375,
@@ -51,10 +54,11 @@
       "tn": 902,
       "fp": 2,
       "fn": 8,
-      "inference_ms_per_1000": 9.051275253656875,
+      "inference_ms_per_1000": 9.017523270742895,
       "score_type": "SVM decision score"
     },
     "TF-IDF_MultinomialNB": {
+      "precision_at_recall_95": 0.8652482269503546,
       "accuracy": 0.9864341085271318,
       "precision": 0.9672131147540983,
       "recall": 0.921875,
@@ -68,10 +72,11 @@
       "tn": 900,
       "fp": 4,
       "fn": 10,
-      "inference_ms_per_1000": 9.317344953414313,
+      "inference_ms_per_1000": 9.335231626146408,
       "score_type": "P(spam)"
     },
     "TF-IDF_LogisticRegression": {
+      "precision_at_recall_95": 0.9609375,
       "accuracy": 0.9912790697674418,
       "precision": 0.983739837398374,
       "recall": 0.9453125,
@@ -85,10 +90,11 @@
       "tn": 902,
       "fp": 2,
       "fn": 7,
-      "inference_ms_per_1000": 7.670583332484487,
+      "inference_ms_per_1000": 7.728803289202294,
       "score_type": "P(spam)"
     },
     "TF-IDF_LinearSVM": {
+      "precision_at_recall_95": 0.9682539682539683,
       "accuracy": 0.9912790697674418,
       "precision": 0.983739837398374,
       "recall": 0.9453125,
@@ -102,7 +108,7 @@
       "tn": 902,
       "fp": 2,
       "fn": 7,
-      "inference_ms_per_1000": 7.665697724356265,
+      "inference_ms_per_1000": 7.608244281312696,
       "score_type": "SVM decision score"
     }
   },
@@ -144,6 +150,10 @@
     "test": "McNemar exact (binomial) test, two-sided",
     "model_a": "BoW_LogisticRegression",
     "model_b": "TF-IDF_LogisticRegression"
+  },
+  "test_cleaned_text_in_train": {
+    "spam": 15,
+    "ham": 3
   },
   "n_errors_best": 8,
   "n_fp_best": 2,

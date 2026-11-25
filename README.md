@@ -48,7 +48,7 @@ Exact duplicates are removed **before** the stratified 80/20 split, and the vect
 
 Without LibreOffice: open the `.docx` in MS Word → Ctrl+A → F9 (choose "Update entire table") → File → Save As → PDF.
 
-Yellow-highlighted `[FILL: …]` placeholders in the report (USNs, guide, HOD, academic year, repository URL) must be completed by the team.
+Yellow-highlighted `[FILL: …]` placeholders in the report (USNs, guide, HOD, academic year, repository URL, code editor) must be completed by the team. **Fill them in the constants at the top of `report/build_report.py`** (`YEAR`, `GUIDE`, `HOD`, `TEAM`, `REPO`, and the college-name / editor lines) and re-run `python report/build_report.py`; hand edits to the `.docx` are overwritten whenever the report is rebuilt.
 
 ## Prediction
 

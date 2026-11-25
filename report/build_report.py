@@ -453,7 +453,7 @@ def chapter2(R, D):
          "manual parameter tuning. General text categorisation, not spam."],
         ["5", "J. M. Gómez Hidalgo et al. (2006)", "Content based SMS spam filtering — DocEng ’06",
          "Bayesian filters and other ML algorithms; several message representations; English and Spanish SMS",
-         "Bayesian e-mail filtering techniques can be transferred to SMS spam. Predates the public SMS Spam "
+         "Examines whether Bayesian e-mail filtering transfers to SMS spam. Predates the public SMS Spam "
          "Collection."],
         ["6", "T. A. Almeida et al. (2011)", "Contributions to the study of SMS spam filtering — DocEng ’11",
          "New public SMS Spam Collection; comparison of established classifiers", "SVM outperformed the other "
@@ -497,7 +497,7 @@ def chapter2(R, D):
         "and is a good baseline. The present study revisits this comparison under a deduplicated split.",
         f"**Delany et al. (2012)** {cite('delany2012')} motivated content-based SMS spam filtering, discussed how "
         "it differs from e-mail spam filtering, reviewed recent research, analysed recent SMS spam and released a "
-        "further dataset, supporting SMS-specific preprocessing such as the normalisation of phone numbers.")
+        "further dataset.")
     R.h2("2.1 Research Gap and Motivation")
     R.paras(
         "Many studies report a single text representation or a single metric such as accuracy, which looks high on "
@@ -604,7 +604,7 @@ def chapter3(R, D):
            "almost all personal conversation. Fig. 3.3 shows the same pattern in words: the median spam message has "
            f"{e['median_words']['spam']:.0f} words and the median ham message {e['median_words']['ham']:.0f}, and the "
            "spam box is narrow while the ham box has many long outliers. Length is therefore informative, but the two "
-           "distributions overlap between roughly 100 and 160 characters, so length alone cannot separate the classes.")
+           "distributions overlap considerably in the middle of the range, so length alone cannot separate the classes.")
     R.figure(FIG / "fig_3_2_length_chars.png", "3.2", "Distribution of message length (characters) by class",
              width=5.3)
     R.figure(FIG / "fig_3_3_length_words.png", "3.3", "Word count per message by class", width=3.6)
@@ -743,7 +743,7 @@ def chapter4(R, D):
     low = [t for t in tokens if float(idf[t]) == min(float(idf[x]) for x in tokens)]
     m2_clean = msgs.iloc[1]["cleaned"]
     claim("free" in low, "'free' (in every example message) has the lowest idf")
-    R.para("**Worked example.** Table 4.2 applies both representations, with exactly the settings used by the models, "
+    R.para("**Worked example.** Table 4.1 applies both representations, with exactly the settings used by the models, "
            f"to three short messages: m1 = “{msgs.iloc[0]['message']}”, m2 = “{msgs.iloc[1]['message']}” and "
            f"m3 = “{msgs.iloc[2]['message']}”. After cleaning, the phone number in m1 becomes `phonetoken`, and stop "
            f"words are removed. Message m2 (“{m2_clean}” after cleaning) keeps only “free”, because all of its other "
@@ -758,7 +758,7 @@ def chapter4(R, D):
     for r in tf.itertuples(index=False):
         label = "idf(t)" if r.msg == "idf" else f"{r.msg} (TF-IDF)"
         rows.append([label] + [f"{float(getattr(r, t)):.4f}" for t in tokens])
-    R.table(["Row"] + tokens, rows, "4.2", "Worked example of BoW counts and TF-IDF weights for three short "
+    R.table(["Row"] + tokens, rows, "4.1", "Worked example of BoW counts and TF-IDF weights for three short "
             "messages", widths=[1.6] + [0.95] * len(tokens), size=10)
     R.h2("4.3 Feature Engineering")
     R.para("Feature engineering in this study means turning raw text into informative tokens. The following steps "
@@ -782,7 +782,7 @@ def chapter4(R, D):
         "The net effect of stop-word removal is measured in the ablation study in Appendix B.",
         "**n-grams and minimum document frequency.** Unigrams only, (1,1), or unigrams plus bigrams, (1,2), and a "
         "minimum document frequency of 1 or 2 were treated as hyperparameters and chosen by cross-validation "
-        "(Section 5.4). Bigrams can capture short phrases such as “call numtoken” or “won moneytoken”.",
+        "(Section 5.4). Bigrams can capture short phrases such as “won moneytoken” or “box numtoken”.",
         f"**Stemming** was not used in the main pipeline, to keep tokens readable in the interpretation of the "
         f"models; Porter stemming {cite('porter1980')} was tested separately in the ablation study."])
     cv = D["cv"]
@@ -805,12 +805,12 @@ def chapter4(R, D):
            f"training set has {n(tr.Records)} messages and the test set {n(te.Records)}; both keep the original spam "
            f"share ({p2(tr.Spam_percent)} and {p2(te.Spam_percent)}). No separate validation set was held out. Instead, "
            "validation is 5-fold stratified cross-validation inside the training set: the training data are divided "
-           "into five folds, and each fold is held out once while the model is trained on the other four. Table 4.1 "
+           "into five folds, and each fold is held out once while the model is trained on the other four. Table 4.2 "
            "summarises the subsets.")
     fmt = lambda v: n(v) if str(v).isdigit() else str(v).replace("-", "–")
     rows = [[r.Subset, fmt(r.Records), f"{float(r.Percent):.2f}%", fmt(r.Ham), fmt(r.Spam),
              f"{float(r.Spam_percent):.2f}%", r.Note] for r in t41.itertuples()]
-    R.table(["Subset", "Messages", "% of total", "Ham", "Spam", "Spam %", "Note"], rows, "4.1",
+    R.table(["Subset", "Messages", "% of total", "Ham", "Spam", "Spam %", "Note"], rows, "4.2",
             "Training, validation and test subsets", widths=[0.85, 0.95, 0.7, 0.65, 0.6, 0.6, 2.1], size=9,
             align=["l", "c", "c", "c", "c", "c", "l"])
     R.para("**Leakage prevention.** The vectorizer (BoW or TF-IDF) is the first step of a scikit-learn `Pipeline`, "
@@ -921,8 +921,10 @@ def chapter5(R, D):
         f"python-docx {pk['python-docx']}.",
         f"**Development environment:** Jupyter Notebook (nbconvert {pk['nbconvert']}) and "
         "[FILL: code editor used, e.g. Visual Studio Code].",
-        f"**Hardware:** {env['cpu']} ({env['logical_cores']} logical cores), {env['ram_gb']:.0f} GB RAM, "
-        f"{env['os']} ({env['machine']})."])
+        f"**Hardware:** {env['cpu'] or 'CPU not detected'}"
+        + (f" ({env['logical_cores']} logical cores)" if env.get("logical_cores") else "")
+        + (f", {env['ram_gb']:.0f} GB RAM" if env.get("ram_gb") else "")
+        + f", {env['os']} ({env['machine']})."])
     R.para("The code is organised as a small Python package (`src/`) with one module per stage, and the notebook "
            "`notebooks/SMS_Spam_Detection.ipynb` calls these modules and shows their outputs: `config.py` (paths, "
            "seed 42, test size, folds and grids), `data.py` (download, cleaning, deduplication and split), "
@@ -980,9 +982,19 @@ search.fit(X_train, y_train)        # the test set is not used here''')
     claim(all(_params(D, k)["clf__class_weight"] == "balanced" for k in lin), "all LR/SVM chose balanced weights")
     bow_all = [f"BoW_{c}" for c in CLFS]
     bigram_bow = all(_params(D, k)["vec__ngram_range"] == [1, 2] for k in bow_all)
+    cw = {}
+    for k in lin:
+        r_ = D["cvres"][k]
+        bal = r_[r_["param_clf__class_weight"] == "balanced"]["mean_test_score"].max()
+        non = r_[r_["param_clf__class_weight"] != "balanced"]["mean_test_score"].max()
+        cw[k] = (bal, non)
+    gains = [cw[k][0] - cw[k][1] for k in lin]
+    claim(all(g > 0 for g in gains), "balanced beats unweighted in CV for every linear model")
     R.para("Three patterns stand out in the selected values. First, all four Logistic Regression and linear SVM "
-           "pipelines selected `class_weight=\"balanced\"`, confirming that re-weighting the minority class helps F1 "
-           "on this imbalanced dataset. Second, "
+           "pipelines selected `class_weight=\"balanced\"`. The benefit is small, however: the best balanced "
+           f"configuration beat the best unweighted one by only {min(gains):.4f}–{max(gains):.4f} in cross-validation "
+           f"F1 (for example {f4(cw['TF-IDF_LinearSVM'][0])} against {f4(cw['TF-IDF_LinearSVM'][1])} for "
+           f"{pretty('TF-IDF_LinearSVM')}), well below the fold-to-fold standard deviation. Second, "
            + ("all three BoW pipelines selected unigrams plus bigrams with min_df = 2, i.e. they used short phrases "
               "but discarded terms that occur in only one training message. " if bigram_bow and all(
                   _params(D, k)["vec__min_df"] == 2 for k in bow_all) else
@@ -1096,7 +1108,7 @@ def chapter6(R, D):
         f"**{full(best)}** achieved the highest test F1 ({f4(b['f1'])}) and is the best model under the rule. It also "
         f"had the highest accuracy ({f4(b['accuracy'])}), recall ({f4(b['recall'])}) and MCC ({f4(b['mcc'])}). It "
         f"misclassified {b['fp'] + b['fn']} of the {n(m['n_test'])} test messages: {b['fp']} ham messages flagged as "
-        f"spam (FPR = {pc(b['fpr'])}) and {b['fn']} spam messages missed. All six models exceed {f4(acc_lo)} accuracy, "
+        f"spam (FPR = {pc(b['fpr'])}) and {b['fn']} spam messages missed. All six models reach at least {f4(acc_lo)} accuracy, "
         "which shows how little accuracy separates them; the F1 scores spread more widely, from "
         f"{f4(f1s[lo])} ({pretty(lo)}) to {f4(f1s[hi])} ({pretty(hi)}).",
         f"The four Logistic Regression and SVM pipelines form a clear top group: each made only "
@@ -1112,15 +1124,17 @@ def chapter6(R, D):
         "Table 6.2 shows that all models are fast. Re-fitting a tuned pipeline on the full training set took well under "
         f"one second ({min(vals[x]['refit'] for x in names):.3f}–{max(vals[x]['refit'] for x in names):.3f} s), and "
         f"classifying 1,000 messages took {min(vals[x]['inf'] for x in names):.2f}–"
-        f"{max(vals[x]['inf'] for x in names):.2f} ms, most of which is text preprocessing. Training-fold F1 is close "
-        "to 1 for most models, so the gap between training and cross-validation F1 (about 0.05) indicates some "
-        "variance; the learning curve in Appendix B shows that more training data would still help.")
+        f"{max(vals[x]['inf'] for x in names):.2f} ms. For the four linear models, training-fold F1 is "
+        f"{min(vals[x]['train'] for x in lin):.4f}–{max(vals[x]['train'] for x in lin):.4f}, so the gap of "
+        f"{min(vals[x]['train'] - vals[x]['cv'] for x in lin):.4f}–{max(vals[x]['train'] - vals[x]['cv'] for x in lin):.4f} "
+        "between training and cross-validation F1 indicates some variance; the learning curve in Appendix B shows "
+        "that more training data would still help.")
 
     R.h2("6.3 Visual Results")
     R.para("**Confusion matrices.** Fig. 6.1 shows the confusion matrix of every model on the test set (rows: actual "
            "class; columns: predicted class; colour: share of the actual class). All models classify almost all ham "
-           "messages correctly; the differences lie in the spam row. For every model, missed spam (FN) is more common "
-           f"than false alarms (FP): for example, {pretty(best)} has {b['fn']} FN and {b['fp']} FP. Both Naive Bayes "
+           "messages correctly; the differences lie in the spam row. For every model, missed spam (FN) is at least as "
+           f"common as false alarms (FP): for example, {pretty(best)} has {b['fn']} FN and {b['fp']} FP. Both Naive Bayes "
            "models make more false positives than any linear model, and TF-IDF + NB also misses the most spam.")
     claim(all(M[x]["fp"] > max(M[y]["fp"] for y in lin) for x in nb), "NB more FP than any linear model")
     claim(max(names, key=lambda x: M[x]["fn"]) == "TF-IDF_MultinomialNB", "TF-IDF NB has the most FN")
@@ -1130,17 +1144,21 @@ def chapter6(R, D):
     R.para("**ROC curves.** Fig. 6.2 plots the ROC curves of all six models. On the full scale (left) all curves hug "
            "the top-left corner, consistent with ROC-AUC values between "
            f"{f4(min(M[x]['roc_auc'] for x in names))} and {f4(max(M[x]['roc_auc'] for x in names))}. The zoomed "
-           "panel (FPR from 0 to 0.10) shows where the models differ: for false positive rates between about 0.01 and "
-           "0.10, the Logistic Regression and SVM curves reach higher recall than the Naive Bayes curves, and low false "
-           "positive rates are the region that matters for a spam filter.")
+           "panel shows where the models differ: over most of the low false-positive range that matters for a spam "
+           "filter, the Logistic Regression and SVM curves reach higher recall than the Naive Bayes curves.")
     R.figure(FIG / "fig_6_2_roc_curves.png", "6.2", "ROC curves of the six models (full range and zoom on FPR ≤ 0.10)",
              width=5.5)
     R.para("**Precision–recall curves.** Fig. 6.3 shows precision against recall. Under class imbalance this view is "
            "more useful than ROC, because the large number of true negatives does not dilute it: the no-skill baseline "
-           f"is the spam share ({m['n_test_spam'] / m['n_test']:.3f}), not 0.5. All models keep precision near 1 up to "
-           "a recall of about 0.85–0.90. Beyond that point, the Naive Bayes curves fall earlier and more steeply, while "
-           "the linear models keep high precision until recall exceeds about 0.95. The average precision (AP) values "
-           f"range from {f4(min(M[x]['pr_auc'] for x in names))} to {f4(max(M[x]['pr_auc'] for x in names))}.")
+           f"is the spam share ({m['n_test_spam'] / m['n_test']:.3f}), not 0.5. The curves separate at high recall: "
+           "the best precision achievable while catching at least 95% of the spam is "
+           f"{f4(min(M[x]['precision_at_recall_95'] for x in lin))}–{f4(max(M[x]['precision_at_recall_95'] for x in lin))} "
+           "for the four linear models but only "
+           f"{f4(max(M[x]['precision_at_recall_95'] for x in nb))} for both Naive Bayes models. The average precision (AP) "
+           f"values range from {f4(min(M[x]['pr_auc'] for x in names))} to {f4(max(M[x]['pr_auc'] for x in names))}.")
+    claim(min(M[x]["precision_at_recall_95"] for x in lin) > max(M[x]["precision_at_recall_95"] for x in nb),
+          "linear models have higher precision at recall >= 0.95 than NB")
+    claim(len({round(M[x]["precision_at_recall_95"], 4) for x in nb}) == 1, "both NB models same precision@R95")
     R.figure(FIG / "fig_6_3_pr_curves.png", "6.3", "Precision–recall curves of the six models (full range and zoom on "
              "recall ≥ 0.80)", width=5.5)
     claim(all(M[x]["precision"] >= M[x]["recall"] for x in names), "precision >= recall for all models")
@@ -1155,8 +1173,14 @@ def chapter6(R, D):
     R.para("**BoW versus TF-IDF.** Fig. 6.5 places the test F1 of each classifier with BoW and with TF-IDF side by "
            "side. The effect of the representation is small and not consistent in direction: TF-IDF changed F1 by "
            f"{diffs['MultinomialNB']:+.4f} for Naive Bayes, {diffs['LogisticRegression']:+.4f} for Logistic Regression "
-           f"and {diffs['LinearSVM']:+.4f} for the SVM. In terms of messages, these differences correspond to one or two "
-           "test messages (compare the FN and FP columns of Table 6.1).")
+           f"and {diffs['LinearSVM']:+.4f} for the SVM. In messages, TF-IDF changed the false positives / missed spam "
+           "of Logistic Regression from "
+           f"{M['BoW_LogisticRegression']['fp']}/{M['BoW_LogisticRegression']['fn']} to "
+           f"{M['TF-IDF_LogisticRegression']['fp']}/{M['TF-IDF_LogisticRegression']['fn']}, of the SVM from "
+           f"{M['BoW_LinearSVM']['fp']}/{M['BoW_LinearSVM']['fn']} to {M['TF-IDF_LinearSVM']['fp']}/{M['TF-IDF_LinearSVM']['fn']}, "
+           f"and of Naive Bayes from {M['BoW_MultinomialNB']['fp']}/{M['BoW_MultinomialNB']['fn']} to "
+           f"{M['TF-IDF_MultinomialNB']['fp']}/{M['TF-IDF_MultinomialNB']['fn']}—for Naive Bayes, fewer false alarms "
+           "were traded for more missed spam.")
     R.figure(FIG / "fig_6_5_bow_vs_tfidf.png", "6.5", "Test F1 of each classifier with BoW and TF-IDF features",
              width=4.8)
     R.para("**Cross-validation versus test.** Fig. 6.6 compares the cross-validation F1 (mean ± one standard deviation "
@@ -1188,7 +1212,8 @@ def chapter6(R, D):
            f"(for example “{'”, “'.join([t for t in lr_spam[1:6] if 'token' not in t][:3])}”), because the selected weak "
            f"regularisation (C = {_params(D, it['lr_model'])['clf__C']}) lets the model give large weights to terms that "
            "appear only in spam. On the ham side, both models rely on conversational words and SMS shorthand "
-           f"(“{'”, “'.join(nb_ham[:6])}”).")
+           f"(Naive Bayes: “{'”, “'.join(nb_ham[:6])}”; Logistic Regression: "
+           f"“{'”, “'.join([t for t in t66['LR ham token'] if ' ' not in t][:6])}”).")
     R.figure(FIG / "fig_6_7_top_features.png", "6.7", "Top 20 spam- and ham-indicative terms: (a) Logistic Regression "
              "coefficients, (b) Naive Bayes log-probability ratios", width=5.1)
     R.para(f"**Best model.** Fig. 6.8 enlarges the confusion matrix of the best model, {full(best)}, with counts and "
@@ -1245,7 +1270,8 @@ def chapter6(R, D):
            f"recall by {100 / m['n_test_spam']:.2f} percentage points. The rankings are therefore not stable at this "
            "level of detail, and the reliable conclusion is the grouping: linear models above Naive Bayes, with the "
            "representation playing a minor role. Choosing the best model by test F1 also makes its score slightly "
-           "optimistic; the cross-validation figures in Table 6.2 are the unbiased comparison.")
+           "optimistic; the cross-validation figures in Table 6.2 are less biased, although they too are the best of "
+           "each grid (and the TF-IDF grids were twice as large because of the extra sublinear_tf option).")
     claim(cv["cv_f1_mean"].max() - cv["cv_f1_mean"].min() < cv["cv_f1_std"].min(), "CV means within one std")
     R.h3("6.4.5 Error Analysis")
     t63 = D["t63"]
@@ -1322,7 +1348,7 @@ def chapter6(R, D):
            "casual messages—including one that contains the word “free”—are correctly treated as ham, which shows that "
            "the model does not react to a single keyword. The two automated messages reveal a limitation: the OTP notice "
            f"(P(spam) = {float(otp[1]):.4f}) and the delivery notice with a tracking link (P(spam) = {float(dlv[1]):.4f}) "
-           "are both labelled spam. In the training data, almost every message with a code number or a URL is spam "
+           "are both labelled spam. In the dataset, almost every message with a code number or a URL is spam "
            f"(only {p2(e['pct_with_url']['ham'])} of ham messages contain a URL), and legitimate transactional messages "
            "of this kind are rare in a collection assembled around 2011. A filter for today’s SMS traffic would need "
            "training data that include such messages (Chapter 7).")
@@ -1354,8 +1380,10 @@ def chapter7(R, D):
         "findings are that the two linear discriminative classifiers outperform Naive Bayes, that BoW and TF-IDF give "
         "very similar results once tuned, and that normalising numbers, URLs and currency symbols is the most useful "
         f"preprocessing step (removing it lowered cross-validation F1 from {f4(tb1.loc['(a)', 'CV F1 mean'])} to "
-        f"{f4(tb1.loc['(c)', 'CV F1 mean'])}; Appendix B). The differences between the four best models are small and "
-        "not statistically significant on this test set.")
+        f"{f4(tb1.loc['(c)', 'CV F1 mean'])}; Appendix B). The four best models differ by at most "
+        f"{max(M[k]['f1'] for k in M if not k.endswith('NB')) - min(M[k]['f1'] for k in M if not k.endswith('NB')):.4f} "
+        "in test F1, and the two best are not significantly different on this test set (McNemar p = "
+        f"{f4(m['mcnemar_top2']['p_value_exact'])}).")
     claim(tb1["CV F1 mean"].idxmin() in ("(c)", "(e)"), "removing normalisation is among the largest drops")
     R.para("The objectives set in Section 1.3 were met as follows:")
     R.bullets([
@@ -1373,12 +1401,12 @@ def chapter7(R, D):
     nb_ham = list(t66["NB ham token"])
     claim("lor" in nb_ham[:5], "'lor' among top NB ham tokens")
     R.bullets([
-        "**One dataset, one period.** All results come from a single public collection assembled around 2011. Its "
+        "**One dataset, one period, one language.** All results come from a single public collection assembled around 2011. Its "
         f"spam comes mainly from a UK forum ({comp[0]['spam']} messages from Grumbletext) and a public corpus, and most "
         f"of its ham ({n(comp[1]['ham'])} messages) from Singaporean university students. The model may partly learn "
         "these sources rather than spam itself—for example, Singapore English particles such as “lor” are among the "
-        "strongest ham indicators in Fig. 6.7.",
-        "**English only.** Messages in other languages or in code-mixed text are not covered.",
+        "strongest ham indicators in Fig. 6.7. All messages are in English; other languages and code-mixed text are "
+        "not covered.",
         f"**Small spam class.** The deduplicated data contain only {n(e['clean_class_counts']['spam'])} spam messages "
         f"and the test set {m['n_test_spam']}, so one message changes test recall by {100 / m['n_test_spam']:.2f} "
         "percentage points and small differences between models are not reliable.",
@@ -1389,7 +1417,11 @@ def chapter7(R, D):
         "**Bag-of-words assumptions.** BoW and TF-IDF ignore word order beyond bigrams and do not capture meaning or "
         "context; deliberately obfuscated words (for example “fr33”) become unknown tokens.",
         "**Comparability.** Removing duplicates makes the scores more honest but less directly comparable with studies "
-        "that evaluated on the raw collection."])
+        "that evaluated on the raw collection.",
+        "**Near-duplicates remain.** Only exact duplicates were removed. After cleaning, "
+        f"{m['test_cleaned_text_in_train']['spam']} of the {m['n_test_spam']} test spam messages and "
+        f"{m['test_cleaned_text_in_train']['ham']} test ham messages have the same normalised text as a training "
+        "message (typically one spam template sent with different numbers), which makes the test somewhat easier."])
     R.h2("7.3 Future Enhancements")
     R.bullets([
         "**Local and multilingual data:** collect or use SMS data from India, including multilingual and code-mixed "
@@ -1399,11 +1431,10 @@ def chapter7(R, D):
         "recognises bare domain names.",
         "**Transformer models** such as DistilBERT, compared with the linear models in both accuracy and computational "
         "cost.",
-        "**Threshold tuning** to a target false positive rate, and **probability calibration** so that the scores can be "
-        "read as reliable probabilities.",
-        "**Explainability** of individual predictions with LIME or SHAP, in addition to the global word weights.",
-        "**Periodic retraining** on newly labelled messages to follow concept drift.",
-        "**A simple web or mobile demonstration** built on the saved pipeline and the existing prediction script."])
+        "**Threshold tuning** to a target false positive rate, **probability calibration**, and **explainability** of "
+        "individual predictions with LIME or SHAP.",
+        "**Periodic retraining** on newly labelled messages to follow concept drift, and a simple web or mobile "
+        "demonstration using the saved pipeline."])
 
 
 # ============================================================== references & appendices
@@ -1453,7 +1484,7 @@ pip install -r requirements.txt""")
     R.para("All random operations use the fixed seed `random_state = 42`, so the data split, cross-validation folds "
            "and model results are identical on every run; only the measured timings vary between machines."
            + (f" On the hardware listed in Section 5.3, the full run up to report generation took about "
-              f"{rt / 60:.1f} minutes." if rt else ""))
+              + (f"{rt:.0f} seconds." if rt < 120 else f"{rt / 60:.1f} minutes.") if rt else ""))
     R.para("**Classifying new messages** with the saved best model:")
     R.code('python -m src.predict "Congratulations! You won a prize, call 09061234567 now"')
     R.para("No API keys, passwords or private data are used anywhere in the project.")

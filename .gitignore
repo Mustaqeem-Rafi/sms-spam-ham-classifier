@@ -10,3 +10,7 @@ data/raw/
 outputs/results/pip_install.log
 # LibreOffice lock files
 .~lock.*
+
+# packaging (rebuilt from the repo)
+submission/
+submission.zip
