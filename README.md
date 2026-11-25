@@ -1,12 +1,14 @@
 # SMS Spam Message Detection Using Machine Learning
 
-ML Case Study 8 — Department of Artificial Intelligence and Machine Learning, BMS Institute of Technology and Management, Bengaluru.
+ML Case Study 8 — Department of Artificial Intelligence and Machine Learning, B M S Institute of Technology and Management, Bengaluru.
 
 A comparison of **Bag of Words** and **TF-IDF** features with **Multinomial Naive Bayes**, **Logistic Regression** and a **linear SVM** (6 tuned pipelines) on the UCI SMS Spam Collection. Every figure, table and number in the report is regenerated from code.
 
 ## Quick start
 
 ```bash
+git clone https://github.com/Mustaqeem-Rafi/sms-spam-ham-classifier.git
+cd sms-spam-ham-classifier
 python3 -m venv .venv                     # Python 3.10+
 source .venv/bin/activate                 # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
@@ -48,7 +50,7 @@ Exact duplicates are removed **before** the stratified 80/20 split, and the vect
 
 Without LibreOffice: open the `.docx` in MS Word → Ctrl+A → F9 (choose "Update entire table") → File → Save As → PDF.
 
-Yellow-highlighted `[FILL: …]` placeholders in the report (USNs, guide, HOD, academic year, repository URL, code editor) must be completed by the team. **Fill them in the constants at the top of `report/build_report.py`** (`YEAR`, `GUIDE`, `HOD`, `TEAM`, `REPO`, and the college-name / editor lines) and re-run `python report/build_report.py`; hand edits to the `.docx` are overwritten whenever the report is rebuilt.
+The remaining yellow-highlighted `[FILL: …]` placeholder in the report (guide name and designation) must be completed by the team. **Fill it in the `GUIDE` constant at the top of `report/build_report.py`** (team details live there too) and re-run `python report/build_report.py`; hand edits to the `.docx` are overwritten whenever the report is rebuilt.
 
 ## Prediction
 

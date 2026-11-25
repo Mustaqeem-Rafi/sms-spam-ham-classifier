@@ -28,15 +28,15 @@ PDF = HERE / "SMS_Spam_Report.pdf"
 TITLE = ("SMS Spam Message Detection Using Machine Learning: A Comparative Study of Naive Bayes, "
          "Logistic Regression and Support Vector Machine with Bag-of-Words and TF-IDF Features")
 SHORT_TITLE = "SMS Spam Message Detection Using Machine Learning"
-COLLEGE = "BMS Institute of Technology and Management"
+COLLEGE = "B M S Institute of Technology and Management"
 DEPT = "Department of Artificial Intelligence and Machine Learning"
 PROGRAMME = "V Semester Bachelor of Engineering in Artificial Intelligence and Machine Learning"
-YEAR = "2026–2027 [FILL: confirm academic year]"
+YEAR = "2026–2027"
 GUIDE = "[FILL: Guide name and designation]"
-HOD = "[FILL: HOD name, or write “the Head of the Department”]"
-TEAM = [("Javeria Taj", "[FILL: USN]"), ("Shaik Mohammed Mustaqeem Rafi", "[FILL: USN]"),
-        ("Mohammed Mohsin", "[FILL: USN]"), ("Varun Kalmane", "[FILL: USN]")]
-REPO = "[FILL: GitHub URL]"
+HOD = "Dr. Anupama H S"
+TEAM = [("Javeria Taj", "1BY24AI057"), ("Shaik Mohammed Mustaqeem Rafi", "1BY24AI141"),
+        ("Mohammed Mohsin", "1BY25AI418"), ("Varun Kalmane", "1BY24AI184")]
+REPO = "https://github.com/Mustaqeem-Rafi/sms-spam-ham-classifier"
 PROBLEM = ("Classify SMS messages as Spam or Ham. Apply text preprocessing such as lowercasing, "
            "tokenization and stop-word removal, represent messages using Bag of Words and TF-IDF, "
            "and compare classifiers.")
@@ -197,9 +197,8 @@ def cite(*keys):
 def cover(R):
     c = WD_ALIGN_PARAGRAPH.CENTER
     logo = HERE / "assets" / "logo.png"
-    R.para(COLLEGE.upper(), style="Cover", size=17, bold=True, space_after=0)
-    R.para("Bengaluru", style="Cover", size=13, bold=True, space_after=2)
-    R.para("[FILL: confirm exact college name as on the college letterhead]", style="Cover", size=10, space_after=6)
+    R.para(COLLEGE.upper(), style="Cover", size=16, bold=True, space_after=0)
+    R.para("Bengaluru", style="Cover", size=13, bold=True, space_after=10)
     if logo.exists():
         p = R.para(style="Cover", align=c)
         p.add_run().add_picture(str(logo), width=Inches(1.3))
@@ -919,8 +918,8 @@ def chapter5(R, D):
         f"NumPy {pk['numpy']}; pandas {pk['pandas']}; SciPy {pk['scipy']}; matplotlib {pk['matplotlib']}; "
         f"seaborn {pk['seaborn']}; wordcloud {pk['wordcloud']}; NLTK {pk['nltk']}; joblib {pk['joblib']}; "
         f"python-docx {pk['python-docx']}.",
-        f"**Development environment:** Jupyter Notebook (nbconvert {pk['nbconvert']}) and "
-        "[FILL: code editor used, e.g. Visual Studio Code].",
+        f"**Development environment:** Python {env['python_version']} virtual environment; scripts run from the "
+        f"command line and the notebook executed with Jupyter (nbconvert {pk['nbconvert']}).",
         f"**Hardware:** {env['cpu'] or 'CPU not detected'}"
         + (f" ({env['logical_cores']} logical cores)" if env.get("logical_cores") else "")
         + (f", {env['ram_gb']:.0f} GB RAM" if env.get("ram_gb") else "")
@@ -1457,7 +1456,7 @@ def appendix_a(R, D):
     R.para("The repository contains all code, the executed notebook, the generated outputs and this report’s "
            "generator. The raw dataset is not stored in the repository; it is downloaded automatically from the UCI "
            "repository. The folder structure is:")
-    R.code("""sms_spam_detection_filter/
+    R.code("""sms-spam-ham-classifier/
 ├── README.md, requirements.txt, run_all.py, DECISIONS.md
 ├── data/raw/              SMSSpamCollection (downloaded, not committed)
 ├── data/processed/        sms_clean.csv
@@ -1470,7 +1469,9 @@ def appendix_a(R, D):
 ├── outputs/results/       metrics.json, cv_summary.csv, env.json, versions.txt, ...
 └── report/                build_report.py, SMS_Spam_Report.docx, SMS_Spam_Report.pdf""")
     R.para("**Installation and data.** With Python 3.10 or later:")
-    R.code("""python -m venv .venv
+    R.code("""git clone https://github.com/Mustaqeem-Rafi/sms-spam-ham-classifier.git
+cd sms-spam-ham-classifier
+python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\\Scripts\\activate
 pip install -r requirements.txt""")
     R.para("The first run downloads `sms+spam+collection.zip` from the UCI repository and extracts "
