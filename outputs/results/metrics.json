@@ -17,7 +17,7 @@
       "tn": 897,
       "fp": 7,
       "fn": 7,
-      "inference_ms_per_1000": 8.514454536854702,
+      "inference_ms_per_1000": 9.005370165416322,
       "score_type": "P(spam)"
     },
     "BoW_LogisticRegression": {
@@ -34,7 +34,7 @@
       "tn": 902,
       "fp": 2,
       "fn": 6,
-      "inference_ms_per_1000": 8.772529030846822,
+      "inference_ms_per_1000": 9.039849856897265,
       "score_type": "P(spam)"
     },
     "BoW_LinearSVM": {
@@ -51,7 +51,7 @@
       "tn": 902,
       "fp": 2,
       "fn": 8,
-      "inference_ms_per_1000": 9.102672505437923,
+      "inference_ms_per_1000": 9.051275253656875,
       "score_type": "SVM decision score"
     },
     "TF-IDF_MultinomialNB": {
@@ -68,7 +68,7 @@
       "tn": 900,
       "fp": 4,
       "fn": 10,
-      "inference_ms_per_1000": 9.115593026883092,
+      "inference_ms_per_1000": 9.317344953414313,
       "score_type": "P(spam)"
     },
     "TF-IDF_LogisticRegression": {
@@ -85,7 +85,7 @@
       "tn": 902,
       "fp": 2,
       "fn": 7,
-      "inference_ms_per_1000": 7.1976744017542105,
+      "inference_ms_per_1000": 7.670583332484487,
       "score_type": "P(spam)"
     },
     "TF-IDF_LinearSVM": {
@@ -102,7 +102,7 @@
       "tn": 902,
       "fp": 2,
       "fn": 7,
-      "inference_ms_per_1000": 7.138363389810908,
+      "inference_ms_per_1000": 7.665697724356265,
       "score_type": "SVM decision score"
     }
   },

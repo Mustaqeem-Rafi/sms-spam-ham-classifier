@@ -311,6 +311,15 @@ def run_eda():
         "corr_chars_words": round(float(corr.loc["n_chars", "n_words"]), 4),
         "empty_after_cleaning": int((df.text_clean.str.len() == 0).sum()),
     }
+    # Which frequent spam tokens does the scikit-learn stop list remove?
+    from .preprocess import STOP_WORDS, clean_text, tokenize
+    raw_spam = Counter(t for txt in spam.text for t in tokenize(clean_text(txt)))
+    top_raw = [t for t, _ in raw_spam.most_common(60)]
+    obs["n_stop_words"] = len(STOP_WORDS)
+    obs["top60_spam_tokens_in_stoplist"] = [t for t in top_raw if t in set(STOP_WORDS)]
+    obs["call_in_stoplist"] = "call" in set(STOP_WORDS)
+    obs["call_count_spam"] = int(raw_spam.get("call", 0))
+    obs["call_count_ham"] = int(sum(tokenize(clean_text(t)).count("call") for t in ham.text))
     with open(C.RESULTS_DIR / "eda_observations.json", "w") as f:
         json.dump(obs, f, indent=2)
     print("EDA done:", {k: obs[k] for k in ["n_raw", "n_clean", "spam_pct", "n_duplicates_removed", "vocab_size_eda"]})

@@ -65,6 +65,32 @@ def _jsonable(params):
     return out
 
 
+WORKED_EXAMPLE = [
+    "WIN a FREE prize! Call 09061234567",
+    "Call me when you are free",
+    "Free entry to win a prize",
+]
+
+
+def worked_example():
+    """Table 4.2: three short messages -> BoW counts and TF-IDF weights (same settings as the models)."""
+    bow = make_vectorizer("BoW")
+    tfidf = make_vectorizer("TF-IDF")
+    Xb = bow.fit_transform(WORKED_EXAMPLE)
+    Xt = tfidf.fit_transform(WORKED_EXAMPLE)
+    vocab = list(bow.get_feature_names_out())
+    idx = [f"m{i + 1}" for i in range(len(WORKED_EXAMPLE))]
+    df_b = pd.DataFrame(Xb.toarray(), columns=vocab, index=idx)
+    df_t = pd.DataFrame(Xt.toarray(), columns=list(tfidf.get_feature_names_out()), index=idx).round(4)
+    idf = pd.DataFrame([tfidf.idf_.round(4)], columns=df_t.columns, index=["idf"])
+    msgs = pd.DataFrame({"id": idx, "message": WORKED_EXAMPLE,
+                         "cleaned": [clean_text(m) for m in WORKED_EXAMPLE]})
+    msgs.to_csv(C.TABLE_DIR / "table_4_2_messages.csv", index=False)
+    df_b.rename_axis("msg").to_csv(C.TABLE_DIR / "table_4_2_bow.csv")
+    pd.concat([df_t, idf]).rename_axis("msg").to_csv(C.TABLE_DIR / "table_4_2_tfidf.csv")
+    return msgs, df_b, df_t, idf
+
+
 def train_all():
     C.ensure_dirs()
     X_train, X_test, y_train, y_test = get_split()
@@ -102,4 +128,5 @@ def train_all():
 
 
 if __name__ == "__main__":
+    worked_example()
     train_all()
