@@ -11,7 +11,7 @@ from docx.shared import Cm, Inches, Pt, RGBColor
 
 FONT = "Times New Roman"
 BLACK = RGBColor(0, 0, 0)
-INLINE = re.compile(r"(\*\*.+?\*\*|\[FILL:[^\]]*\]|(?<![\w*])\*[^*\s][^*]*?\*(?![\w*])|`[^`]+`)")
+INLINE = re.compile(r"(\*\*.+?\*\*|\[FILL:[^\]]*\]|(?<![\w*])\*[^*\s][^*]*?\*(?![\w*])|`[^`]+`|_\{[^{}]*\}|\^\{[^{}]*\})")
 
 
 def _rfonts(el, name=FONT):
@@ -208,6 +208,10 @@ class ReportDoc:
             elif part.startswith("`") and part.endswith("`"):
                 r = p.add_run(part[1:-1]); r.font.name = "Courier New"; _rfonts(r._r, "Courier New")
                 r.font.size = Pt((size or 12) - 1)
+            elif part.startswith("_{") and part.endswith("}"):
+                r = p.add_run(part[2:-1]); r.font.subscript = True
+            elif part.startswith("^{") and part.endswith("}"):
+                r = p.add_run(part[2:-1]); r.font.superscript = True
             elif part.startswith("*") and part.endswith("*") and len(part) > 2:
                 r = p.add_run(part[1:-1]); r.italic = True
             else:

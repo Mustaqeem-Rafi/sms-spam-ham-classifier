@@ -101,8 +101,9 @@ def fig_length_words(df):
     _box(ax, df, "n_words", "Words per message")
     for i, c in enumerate(ORDER):
         med = df.loc[df.label == c, "n_words"].median()
-        ax.annotate(f"median {med:.0f}", (i, med), xytext=(34, 0), textcoords="offset points",
-                    va="center", fontsize=8.5, color=C.INK)
+        ax.annotate(f"median {med:.0f}", (i + 0.27, med), xytext=(4, 0), textcoords="offset points",
+                    va="center", ha="left", fontsize=8.5, color=C.INK)
+    ax.set_xlim(-0.5, 1.95)
     ax.set_title("Word count by class")
     return savefig(fig, "fig_3_3_length_words.png")
 

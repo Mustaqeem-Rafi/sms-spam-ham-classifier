@@ -32,6 +32,20 @@ def predict(messages):
     return [(t, "Spam (1)" if p == 1 else "Ham (0)", float(s), kind) for t, p, s in zip(messages, preds, scores)], m
 
 
+DEMO_MESSAGES = ["Congratulations! You won a £1000 voucher, call 09061234567 now to claim",
+                 "Hey, are we still meeting at 5?"]
+
+
+def save_cli_demo():
+    """Run the CLI once on two demo messages and save the transcript for report §6.5."""
+    import subprocess
+    cmd = [sys.executable, "-m", "src.predict", *DEMO_MESSAGES]
+    out = subprocess.run(cmd, cwd=C.ROOT, capture_output=True, text=True, check=True).stdout
+    shown = "python -m src.predict \\\n" + " \\\n".join(f'    "{m}"' for m in DEMO_MESSAGES)
+    (C.RESULTS_DIR / "predict_cli_output.txt").write_text(f"$ {shown}\n{out}")
+    return out
+
+
 def main(argv=None):
     argv = sys.argv[1:] if argv is None else argv
     if not argv:

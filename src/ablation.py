@@ -100,7 +100,13 @@ def run_ablation():
             res = pd.read_csv(C.RESULTS_DIR / f"cv_results_{name}.csv")
             res = res.sort_values(["rank_test_score", "mean_test_score"], ascending=[True, False]).head(10)
             for _, r in res.iterrows():
-                p = {k.replace("param_", ""): r[k] for k in res.columns if k.startswith("param_")}
+                def fmt(v):
+                    if v is None or (isinstance(v, float) and np.isnan(v)):
+                        return "None"
+                    if isinstance(v, float) and v.is_integer():
+                        return str(int(v))
+                    return str(v)
+                p = {k.replace("param_", ""): fmt(r[k]) for k in res.columns if k.startswith("param_")}
                 top.append({"Model": pretty(name), "Rank": int(r["rank_test_score"]),
                             "Parameters": "; ".join(f"{k.split('__')[1]}={v}" for k, v in p.items()),
                             "CV F1 mean": round(r["mean_test_score"], 4), "CV F1 std": round(r["std_test_score"], 4)})

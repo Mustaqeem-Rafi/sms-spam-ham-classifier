@@ -76,7 +76,34 @@ def load():
         D[key] = T(name)
     D["clf_reports"] = {f"{v}_{c}": (RES / f"clf_report_{v}_{c}.txt").read_text() for v in VECS for c in CLFS}
     D["versions"] = (RES / "versions.txt").read_text().split()
+    D["cvres"] = {f"{v}_{c}": pd.read_csv(RES / f"cv_results_{v}_{c}.csv") for v in VECS for c in CLFS}
     return D
+
+
+def _fmt_param(v):
+    if v is None or (isinstance(v, float) and v != v):
+        return "None"
+    if isinstance(v, float) and v.is_integer():
+        return str(int(v))
+    return str(v).replace(" ", "")
+
+
+def grid_values(D, name, param):
+    """Search range of one hyperparameter, read from the saved GridSearchCV results."""
+    col = D["cvres"][name][f"param_{param}"]
+    vals = list(dict.fromkeys(col.tolist()))
+    def key(v):
+        try:
+            return (0, float(v))
+        except (TypeError, ValueError):
+            return (1, str(v))
+    nums = [v for v in vals if isinstance(v, (int, float)) and not (isinstance(v, float) and v != v)
+            and not isinstance(v, bool)]
+    if len(nums) == len(vals):
+        vals = sorted(vals, key=key)
+    elif any(isinstance(v, float) and v != v for v in vals):
+        vals = [None] + [v for v in vals if not (isinstance(v, float) and v != v)]
+    return ", ".join(_fmt_param(v) for v in vals)
 
 
 def f4(x):
@@ -296,9 +323,9 @@ def front_lists(R):
     R.doc.add_paragraph("TABLE OF CONTENTS", style="Prelim Heading NoTOC")
     R.toc('TOC \\o "1-3" \\h \\z \\u')
     R.doc.add_paragraph("LIST OF FIGURES", style="Prelim Heading")
-    R.toc('TOC \\h \\z \\t "Figure Caption,1"')
+    R.toc('TOC \\h \\z \\t "Figure Caption,2"')
     R.doc.add_paragraph("LIST OF TABLES", style="Prelim Heading")
-    R.toc('TOC \\h \\z \\t "Table Caption,1"')
+    R.toc('TOC \\h \\z \\t "Table Caption,2"')
 
 
 ABBREVIATIONS = [
@@ -363,6 +390,7 @@ def chapter1(R, D):
     p.paragraph_format.right_indent = Inches(0.4)
     p = R.para("*Dataset:* UCI SMS Spam Collection — https://archive.ics.uci.edu/dataset/228/sms+spam+collection. "
                "*Suggested ML techniques:* Naive Bayes, Logistic Regression, SVM, TF-IDF.")
+    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
     p.paragraph_format.left_indent = Inches(0.4)
     p.paragraph_format.right_indent = Inches(0.4)
     R.para("The system takes the raw text of one SMS message as input and classifies it as Spam (1) or Ham (0).")
@@ -447,7 +475,7 @@ def chapter2(R, D):
         "schemes for document retrieval. They argued that weighted single-term indexing performs better than more "
         "elaborate text representations and discussed the term-frequency, inverse-document-frequency and "
         "length-normalisation components of a term weight, on which TF-IDF is based.",
-        f"**Sahami *et al.* (1998)** {cite('sahami1998')} treated junk e-mail filtering as a decision-theoretic "
+        f"**Sahami et al. (1998)** {cite('sahami1998')} treated junk e-mail filtering as a decision-theoretic "
         "problem and used a probabilistic (Bayesian) classifier with different costs for the two kinds of error. "
         "They showed that adding domain-specific features to the raw words of a message gave much more accurate "
         "filters, which motivates the domain-specific normalisation tokens used here.",
@@ -459,15 +487,15 @@ def chapter2(R, D):
         "data, such as its very large number of features, and explained why support vector machines are "
         "appropriate for text categorisation. The study reported that SVMs are robust and work without manual "
         "parameter tuning.",
-        f"**Gómez Hidalgo *et al.* (2006)** {cite('gomez2006')} asked whether the Bayesian filtering techniques "
+        f"**Gómez Hidalgo et al. (2006)** {cite('gomez2006')} asked whether the Bayesian filtering techniques "
         "that are effective for e-mail spam can be transferred to SMS spam. They built English and Spanish SMS "
         "spam test collections and evaluated several message representations and machine-learning algorithms on "
         "them.",
-        f"**Almeida *et al.* (2011)** {cite('almeida2011')} introduced the SMS Spam Collection, a real, public and "
+        f"**Almeida et al. (2011)** {cite('almeida2011')} introduced the SMS Spam Collection, a real, public and "
         "non-encoded collection that the authors described as the largest of its kind at the time. They compared "
         "several established machine-learning methods on it and concluded that SVM outperformed the other methods "
         "and is a good baseline. The present study revisits this comparison under a deduplicated split.",
-        f"**Delany *et al.* (2012)** {cite('delany2012')} motivated content-based SMS spam filtering, discussed how "
+        f"**Delany et al. (2012)** {cite('delany2012')} motivated content-based SMS spam filtering, discussed how "
         "it differs from e-mail spam filtering, reviewed recent research, analysed recent SMS spam and released a "
         "further dataset, supporting SMS-specific preprocessing such as the normalisation of phone numbers.")
     R.h2("2.1 Research Gap and Motivation")
@@ -701,7 +729,7 @@ def chapter4(R, D):
     R.equation("tfidf(t, d) = tf(t, d) × idf(t)", "4.3")
     R.para("and each message vector **v** is then divided by its Euclidean (L2) norm so that all messages have unit "
            "length:")
-    R.equation("v̂ = v / ‖v‖₂ = v / √(v₁² + v₂² + … + v_m²)", "4.4")
+    R.equation("v̂ = v / ‖v‖₂ = v / √(v₁² + v₂² + … + v_{m}²)", "4.4")
     R.para("When `sublinear_tf` is enabled (a tuned option), the count tf is replaced by 1 + ln(tf), which reduces "
            "the influence of a word repeated many times in one message.")
     R.para("**Scaling.** No further feature scaling was applied. TF-IDF vectors are already L2-normalised, so all "
@@ -819,7 +847,7 @@ def chapter5(R, D):
     R.para("Three classifiers were chosen: a generative probabilistic model (Multinomial Naive Bayes) and two "
            "discriminative linear models (Logistic Regression and a linear Support Vector Machine). All three are "
            "standard, fast and well suited to high-dimensional sparse text features. In the formulas below, a message "
-           "is represented by its feature vector **x** = (x₁, …, x_m) over a vocabulary *V* of *m* terms, and the "
+           "is represented by its feature vector **x** = (x₁, …, x_{m}) over a vocabulary *V* of *m* terms, and the "
            "class is *c* ∈ {ham, spam}.")
     nb_b, nb_t = _params(D, "BoW_MultinomialNB"), _params(D, "TF-IDF_MultinomialNB")
     R.h3("5.2.1 Algorithm 1: Multinomial Naive Bayes")
@@ -828,36 +856,38 @@ def chapter5(R, D):
     R.para("It assumes that, given the class, the terms of a message occur independently of each other. Under the "
            f"multinomial event model {cite('mccallum1998')}, each occurrence of a term is drawn from a class-specific "
            "word distribution, so")
-    R.equation("P(c | x) ∝ P(c) · ∏_{t ∈ V} P(t | c)^{x_t}", "5.2")
+    R.equation("P(c | x) ∝ P(c) · ∏_{t∈V} P(t | c)^{xₜ}", "5.2")
     R.para("where P(c) is the share of class *c* in the training data. The word probabilities are estimated with "
            "additive (Laplace/Lidstone) smoothing so that a term never seen in one class does not force the product "
            "to zero:")
-    R.equation("P(t | c) = (N_{c,t} + α) / (N_c + α·|V|)", "5.3")
-    R.para("Here N_{c,t} is the total count (or TF-IDF weight) of term *t* in training messages of class *c*, N_c is "
+    R.equation("P(t | c) = (N_{c,t} + α) / (N_{c} + α·|V|)", "5.3")
+    R.para("Here N_{c,t} is the total count (or TF-IDF weight) of term *t* in training messages of class *c*, N_{c} is "
            "the total over all terms, and α > 0 is the smoothing parameter (α = 1 is Laplace smoothing). Prediction "
            "uses logarithms to avoid numerical underflow:")
-    R.equation("ĉ = argmax_c [ log P(c) + Σ_t x_t · log P(t | c) ]", "5.4")
+    R.equation("ĉ = argmax_{c} [ log P(c) + Σ_{t} x_{t} · log P(t | c) ]", "5.4")
     R.para(f"**Why it was chosen.** Multinomial Naive Bayes trains in a single pass over the data, has one "
            f"hyperparameter and is the classic baseline for spam filtering {cite('sahami1998')}. **Limitations.** The "
            "independence assumption is clearly false for language (for example “call” and “now” tend to occur "
            "together), which tends to push predicted probabilities towards 0 or 1, so they should not be read as "
            "calibrated probabilities. The model also cannot weigh evidence discriminatively the way a linear "
-           f"classifier can. The grid searched α ∈ {{0.01, 0.05, 0.1, 0.5, 1.0}}; the selected values were "
+           f"classifier can. The grid searched α ∈ {{{grid_values(D, 'BoW_MultinomialNB', 'clf__alpha')}}}; the "
+           "selected values were "
            f"α = {nb_b['clf__alpha']} with BoW and α = {nb_t['clf__alpha']} with TF-IDF.")
     R.h3("5.2.2 Algorithm 2: Logistic Regression")
     R.para("Logistic Regression models the probability of spam directly as a sigmoid function of a linear score:")
     R.equation("P(y = 1 | x) = σ(wᵀx + b) = 1 / (1 + e^{−(wᵀx + b)})", "5.5")
     R.para("The weights **w** and bias *b* are found by minimising the regularised log-loss. With labels "
-           "yᵢ ∈ {−1, +1}, the L2-regularised form solved by the liblinear solver is")
-    R.equation("min_{w,b}  ½‖w‖² + C · Σᵢ sᵢ · log(1 + e^{−yᵢ(wᵀxᵢ + b)})", "5.6")
+           "y_{i} ∈ {−1, +1}, the L2-regularised form solved by the liblinear solver is")
+    R.equation("min_{w,b}  ½‖w‖² + C · Σ_{i} s_{i} · log(1 + e^{−yᵢ(wᵀxᵢ + b)})", "5.6")
     R.para("where *C* is the inverse of the regularisation strength (small *C* = strong regularisation, simpler model) "
-           "and sᵢ is a sample weight. With `class_weight=\"balanced\"`, sᵢ = n / (2·n_{c(i)}), so errors on the "
+           "and s_{i} is a sample weight. With `class_weight=\"balanced\"`, s_{i} = n / (2·n_{c(i)}), so errors on the "
            "minority (spam) class cost more. A message is labelled spam when P(y = 1 | x) > 0.5.")
     R.para("**Why it was chosen.** Logistic Regression gives probabilistic outputs, its training problem is convex "
            "(a unique optimum) and each coefficient shows how strongly a term pushes a message towards spam or ham, "
            "which makes the model easy to interpret (Section 6.3). **Limitations.** The decision boundary is linear in "
            "the features, so interactions between words are captured only through n-grams, and performance depends on "
-           "choosing *C* well. The grid searched C ∈ {0.1, 1, 10, 100} and class_weight ∈ {None, balanced}.")
+           f"choosing *C* well. The grid searched C ∈ {{{grid_values(D, 'BoW_LogisticRegression', 'clf__C')}}} and "
+           f"class_weight ∈ {{{grid_values(D, 'BoW_LogisticRegression', 'clf__class_weight')}}}.")
     R.h3("5.2.3 Algorithm 3: Linear Support Vector Machine")
     R.para(f"A Support Vector Machine {cite('cortes1995')} looks for the separating hyperplane with the largest margin "
            "between the two classes. For a linear SVM the decision function is")
@@ -865,7 +895,7 @@ def chapter5(R, D):
     R.para("The margin between the two supporting hyperplanes f(x) = ±1 is 2/‖w‖, so maximising it is the same as "
            "minimising ‖w‖. Messages that violate the margin are penalised with a hinge-type loss, giving the "
            "soft-margin problem")
-    R.equation("min_{w,b}  ½‖w‖² + C · Σᵢ sᵢ · max(0, 1 − yᵢ f(xᵢ))²", "5.8")
+    R.equation("min_{w,b}  ½‖w‖² + C · Σ_{i} s_{i} · max(0, 1 − y_{i} f(x_{i}))²", "5.8")
     R.para("scikit-learn’s `LinearSVC` uses this squared hinge loss with an L2 penalty by default; the ordinary hinge "
            "loss uses the first power instead of the square. *C* again trades margin width against training errors, "
            "and the same balanced class weights are available.")
@@ -874,7 +904,8 @@ def chapter5(R, D):
            f"{cite('almeida2011')}. **Limitations.** An SVM does not produce probabilities; the signed distance f(x) "
            "is used as a score instead (this is valid for ROC and precision–recall curves, which depend only on the "
            "ranking of scores). Like Logistic Regression, it is a linear model. The grid searched "
-           "C ∈ {0.01, 0.1, 1, 10} and class_weight ∈ {None, balanced}.")
+           f"C ∈ {{{grid_values(D, 'BoW_LinearSVM', 'clf__C')}}} and "
+           f"class_weight ∈ {{{grid_values(D, 'BoW_LinearSVM', 'clf__class_weight')}}}.")
     R.h2("5.3 Implementation Details")
     pk = env["packages"]
     R.para(f"The study was implemented in Python {env['python_version']} with scikit-learn {cite('pedregosa2011')} "
@@ -902,16 +933,17 @@ def chapter5(R, D):
     R.para("The core of the training code is shown below. The vectorizer is a step of the pipeline, so it is "
            "re-fitted inside every cross-validation split:")
     R.code('''pipe = Pipeline([
-    ("vec", TfidfVectorizer(preprocessor=clean_text, token_pattern=r"\\b[a-z][a-z]+\\b",
-                            stop_words=STOP_WORDS)),
+    ("vec", TfidfVectorizer(preprocessor=clean_text, stop_words=STOP_WORDS,
+                            token_pattern=r"\\b[a-z][a-z]+\\b")),
     ("clf", LinearSVC(dual="auto", random_state=42)),
 ])
 grid = {"vec__ngram_range": [(1, 1), (1, 2)], "vec__min_df": [1, 2],
         "vec__sublinear_tf": [False, True],
-        "clf__C": [0.01, 0.1, 1, 10], "clf__class_weight": [None, "balanced"]}
-search = GridSearchCV(pipe, grid, scoring="f1", n_jobs=-1, refit=True,
-                      cv=StratifiedKFold(n_splits=5, shuffle=True, random_state=42))
-search.fit(X_train, y_train)          # test set is not used here''')
+        "clf__C": [0.01, 0.1, 1, 10],
+        "clf__class_weight": [None, "balanced"]}
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+search = GridSearchCV(pipe, grid, scoring="f1", cv=cv, n_jobs=-1, refit=True)
+search.fit(X_train, y_train)        # the test set is not used here''')
     R.h2("5.4 Hyperparameter Tuning")
     total_fits = int(cv["n_fits"].sum())
     total_time = float(cv["search_time_s"].sum())
@@ -923,9 +955,6 @@ search.fit(X_train, y_train)          # test set is not used here''')
            f"{total_time:.1f} seconds in total on the hardware above. Fixed settings were `solver=\"liblinear\"` and "
            "`max_iter=2000` for Logistic Regression, and `dual=\"auto\"` and `max_iter=10000` for the linear SVM. "
            "Table 5.1 lists the search ranges and the selected values.")
-    ranges = {"vec__ngram_range": "(1,1), (1,2)", "vec__min_df": "1, 2", "vec__sublinear_tf": "False, True",
-              "clf__alpha": "0.01, 0.05, 0.1, 0.5, 1.0", "clf__class_weight": "None, balanced"}
-    c_range = {"LogisticRegression": "0.1, 1, 10, 100", "LinearSVM": "0.01, 0.1, 1, 10"}
     pname = {"vec__ngram_range": "ngram_range", "vec__min_df": "min_df", "vec__sublinear_tf": "sublinear_tf",
              "clf__alpha": "alpha (α)", "clf__C": "C", "clf__class_weight": "class_weight"}
     rows = []
@@ -940,7 +969,7 @@ search.fit(X_train, y_train)          # test set is not used here''')
                     continue
                 val = bp[k]
                 val = f"({val[0]},{val[1]})" if isinstance(val, list) else ("None" if val is None else str(val))
-                rng = c_range[c] if k == "clf__C" else ranges[k]
+                rng = grid_values(D, name, k)
                 rows.append([pretty(name) if first else "", pname[k], rng, val,
                              "Grid search, 5-fold CV, F1" if first else "″"])
                 first = False
@@ -993,8 +1022,8 @@ def chapter6(R, D):
            "area under the curve of recall (true positive rate) against FPR as the decision threshold varies; it equals "
            "the probability that a randomly chosen spam message receives a higher score than a randomly chosen ham "
            "message. The PR-AUC, computed as average precision (AP), summarises the precision–recall curve:")
-    R.equation("AP = Σ_k (R_k − R_{k−1}) · P_k", "6.7")
-    R.para("where P_k and R_k are the precision and recall at the k-th threshold. The scores used for these curves are "
+    R.equation("AP = Σ_{k} (R_{k} − R_{k−1}) · P_{k}", "6.7")
+    R.para("where P_{k} and R_{k} are the precision and recall at the k-th threshold. The scores used for these curves are "
            "the predicted spam probability for Naive Bayes and Logistic Regression and the decision function f(x) for "
            "the linear SVM; because ROC and PR curves depend only on the ordering of the scores, both are valid.")
     R.para(f"**Why these metrics.** With {p2(e['ham_pct'])} ham messages, a trivial model that predicts “ham” for "
@@ -1008,8 +1037,9 @@ def chapter6(R, D):
            f"({n(m['n_test_ham'])} ham and {n(m['n_test_spam'])} spam). The **best-model rule**, fixed before "
            "evaluation, is: highest test F1 (spam); ties are broken by the lower false positive rate and then by the "
            "higher ROC-AUC. The reason is that a false positive costs more than a false negative. Table 6.1 reports the "
-           "test results (best value in each column in bold) and Table 6.2 the cross-validation results and timings.")
-    cols = [("Accuracy", "accuracy", max), ("Precision", "precision", max), ("Recall", "recall", max),
+           "test results (Acc. = accuracy, Prec. = precision; best value in each column in bold) and Table 6.2 the "
+           "cross-validation results and timings.")
+    cols = [("Acc.", "accuracy", max), ("Prec.", "precision", max), ("Recall", "recall", max),
             ("F1", "f1", max), ("Macro-F1", "macro_f1", max), ("ROC-AUC", "roc_auc", max), ("PR-AUC", "pr_auc", max),
             ("MCC", "mcc", max), ("FPR", "fpr", min), ("FP", "fp", min), ("FN", "fn", min)]
     rows, bold = [], set()
@@ -1024,8 +1054,8 @@ def chapter6(R, D):
         for i, nm in enumerate(names):
             if round(M[nm][k], 4) == best_v:
                 bold.add((i, j))
-    R.table(["Model"] + [c[0] for c in cols], rows, "6.1", "Test-set results of the six models (spam = positive "
-            "class; best value per column in bold)", widths=[0.92] + [0.5] * 11, size=8, bold_cells=bold,
+    R.table(["Model"] + [c[0] for c in cols], rows, "6.1", "Test-set results of the six models (best value per "
+            "column in bold)", widths=[0.92] + [0.5] * 11, size=8, bold_cells=bold,
             header_size=7.5)
     rows, bold = [], set()
     t62cols = [("cv", max), ("std", None), ("train", None), ("test", max), ("refit", min), ("inf", min), ("voc", None)]
@@ -1160,7 +1190,7 @@ def chapter6(R, D):
            "appear only in spam. On the ham side, both models rely on conversational words and SMS shorthand "
            f"(“{'”, “'.join(nb_ham[:6])}”).")
     R.figure(FIG / "fig_6_7_top_features.png", "6.7", "Top 20 spam- and ham-indicative terms: (a) Logistic Regression "
-             "coefficients, (b) Naive Bayes log-probability ratios", width=4.8)
+             "coefficients, (b) Naive Bayes log-probability ratios", width=5.1)
     R.para(f"**Best model.** Fig. 6.8 enlarges the confusion matrix of the best model, {full(best)}, with counts and "
            f"row percentages. Of the {n(m['n_test_ham'])} ham messages, {b['tn']} ({pc(b['tn'] / m['n_test_ham'])}) are "
            f"classified correctly and {b['fp']} ({pc(b['fpr'])}) are wrongly flagged as spam. Of the "
@@ -1200,13 +1230,11 @@ def chapter6(R, D):
     claim(M["TF-IDF_LogisticRegression"]["fp"] == M["TF-IDF_LinearSVM"]["fp"] and
           M["TF-IDF_LogisticRegression"]["fn"] == M["TF-IDF_LinearSVM"]["fn"], "TF-IDF LR and SVM same error counts")
     R.h3("6.4.3 Precision–Recall Trade-off and Class Weighting")
-    R.para("Every model operates at its default threshold (probability 0.5, or decision value 0 for the SVM). At this "
-           f"threshold the best model has precision {f4(b['precision'])} and recall {f4(b['recall'])}: it is tuned to "
-           "avoid false alarms. The precision–recall curves (Fig. 6.3) show that a lower threshold would catch more spam "
-           "at the cost of more false positives; for a real filter, the threshold should be set to a target FPR on "
-           "validation data rather than left at the default. All four linear models selected balanced class weights in "
-           "cross-validation, which moves the decision boundary towards the ham side and increases recall; without it, "
-           "the minority spam class would be under-weighted during training.")
+    R.para("All models use the default threshold (probability 0.5, or decision value 0 for the SVM), at which the "
+           f"best model has precision {f4(b['precision'])} and recall {f4(b['recall'])}. Fig. 6.3 shows that a lower "
+           "threshold would catch more spam at the cost of more false positives; a deployed filter should set the "
+           "threshold for a target FPR on validation data. The balanced class weights chosen by all four linear models "
+           "shift the boundary towards higher recall for the minority spam class.")
     R.h3("6.4.4 Agreement between Cross-Validation and Test Results")
     rank_cv = m["ranking_by_cv_f1"]
     R.para(f"The ranking of the models differs between cross-validation and the test set. In cross-validation "
@@ -1262,14 +1290,11 @@ def chapter6(R, D):
     R.h3("6.4.7 Why the Best Model Wins")
     R.para(f"{full(best)} wins under the rule because it combines the lowest number of false positives "
            f"({b['fp']}, shared with the other linear models) with the fewest missed spam messages ({b['fn']}, against "
-           f"{M[second]['fn']} for {pretty(second)}). Its configuration—unigrams and bigrams, terms required to appear in "
-           f"at least two training messages, balanced class weights and weak regularisation (C = "
-           f"{_params(D, best)['clf__C']})—lets it use short phrases from spam templates while ignoring one-off terms. "
+           f"{M[second]['fn']} for {pretty(second)}); its bigrams with min_df = 2 capture short spam-template phrases "
+           "while ignoring one-off terms. "
            "However, its margin over the next three models is one or two test messages, the McNemar test finds no "
-           f"significant difference, and in cross-validation it ranked {rank_cv.index(best) + 1} of 6. The fair "
-           "conclusion is that "
-           "Logistic Regression and the linear SVM, with either BoW or TF-IDF features, are equally good choices on "
-           f"this dataset, and {pretty(best)} is selected because the predefined rule requires one model.")
+           f"significant difference, and it ranked {rank_cv.index(best) + 1} of 6 in cross-validation. Logistic "
+           "Regression and the linear SVM, with either representation, are therefore equally good choices here.")
 
     R.h2("6.5 Sample Predictions")
     t64 = D["t64"]
@@ -1301,9 +1326,9 @@ def chapter6(R, D):
            f"(only {p2(e['pct_with_url']['ham'])} of ham messages contain a URL), and legitimate transactional messages "
            "of this kind are rare in a collection assembled around 2011. A filter for today’s SMS traffic would need "
            "training data that include such messages (Chapter 7).")
-    R.para("The best model can also be used from the command line. The following output was produced by "
-           "`src/predict.py` during the run that generated this report:")
     if D["cli"]:
+        R.para("The best model can also be used from the command line. The following output was produced by "
+               "`src/predict.py` during the run that generated this report:")
         R.code(D["cli"].strip())
 
 
@@ -1470,8 +1495,8 @@ def appendix_b(R, D):
              width=5.5)
     R.h2("B.2 Learning Curve")
     first, last = tb3.iloc[0], tb3.iloc[-1]
-    R.para(f"Fig. B.1 is complemented by the learning curve of {full(best)} in Fig. B.2, which shows training and "
-           "cross-validation F1 as the number of training messages grows. Cross-validation F1 rises from "
+    R.para(f"Fig. B.2 shows the learning curve of {full(best)}: training and cross-validation F1 as the number of "
+           "training messages grows. Cross-validation F1 rises from "
            f"{f4(first['CV F1 mean'])} with {n(first['Training messages'])} messages to {f4(last['CV F1 mean'])} with "
            f"{n(last['Training messages'])} messages, while training F1 stays close to 1. The curve is still rising "
            "at the right edge, so more labelled data—particularly more spam—would probably improve the model further.")

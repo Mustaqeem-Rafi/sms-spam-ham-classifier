@@ -82,7 +82,7 @@ def main():
     from src.evaluate import run_evaluation
     from src.flowchart import draw_workflow
     from src.interpret import run_interpretation
-    from src.predict import main as predict_main
+    from src.predict import save_cli_demo
     from src.preprocess import _self_check
     from src.train import train_all, worked_example
 
@@ -98,14 +98,7 @@ def main():
     step("Workflow figure", draw_workflow)
     step("Ablation + learning curve", run_ablation)
 
-    # CLI demo output for report §6.5
-    cmd = [sys.executable, "-m", "src.predict",
-           "Congratulations! You won a £1000 voucher, call 09061234567 now to claim",
-           "Hey, are we still meeting at 5?"]
-    cli = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
-    shown = 'python -m src.predict "Congratulations! You won a £1000 voucher, call 09061234567 now to claim" "Hey, are we still meeting at 5?"'
-    (C.RESULTS_DIR / "predict_cli_output.txt").write_text(f"$ {shown}\n{cli.stdout}")
-    print(cli.stdout)
+    print(step("Prediction CLI demo", save_cli_demo))
 
     if not args.no_notebook:
         nb = ROOT / "notebooks" / "SMS_Spam_Detection.ipynb"

@@ -1,0 +1,8 @@
+$ python -m src.predict \
+    "Congratulations! You won a £1000 voucher, call 09061234567 now to claim" \
+    "Hey, are we still meeting at 5?"
+Model: BoW + LR (outputs/models)
+Message : Congratulations! You won a £1000 voucher, call 09061234567 now to claim
+Label   : Spam (1)   P(spam) = 1.0000
+Message : Hey, are we still meeting at 5?
+Label   : Ham (0)   P(spam) = 0.0002
