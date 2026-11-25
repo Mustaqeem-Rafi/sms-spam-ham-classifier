@@ -1,0 +1,10 @@
+BoW + SVM - classification report on the test set (n=1032)
+
+              precision    recall  f1-score   support
+
+         ham     0.9912    0.9978    0.9945       904
+        spam     0.9836    0.9375    0.9600       128
+
+    accuracy                         0.9903      1032
+   macro avg     0.9874    0.9676    0.9772      1032
+weighted avg     0.9903    0.9903    0.9902      1032

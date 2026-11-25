@@ -1,0 +1,9 @@
+error_type,text,actual,predicted,score
+FN (spam missed),"Hi this is Amy, we will be sending you a free phone number in a couple of days, which will give you an access to all the adult parties...",spam,ham,0.0006
+FN (spam missed),dating:i have had two of these. Only started after i sent a text to talk sport radio last week. Any connection do you think or coincidence?,spam,ham,0.0036
+FN (spam missed),thesmszone.com lets you send free anonymous and masked messages..im sending this message from there..do you see the potential for abuse???,spam,ham,0.0055
+FN (spam missed),Welcome! Please reply with your AGE and GENDER to begin. e.g 24M,spam,ham,0.0608
+FN (spam missed),Sorry! U can not unsubscribe yet. THE MOB offer package has a min term of 54 weeks> pls resubmit request after expiry. Reply THEMOB HELP 4 more info,spam,ham,0.112
+FN (spam missed),Adult 18 Content Your video will be with you shortly,spam,ham,0.1777
+FP (ham marked spam),"Please protect yourself from e-threats. SIB never asks for sensitive information like Passwords,ATM/SMS PIN thru email. Never share your password with anybody.",ham,spam,0.9159
+FP (ham marked spam),I (Career Tel) have added u as a contact on INDYAROCKS.COM to send FREE SMS. To remove from phonebook - sms NO to  <#>,ham,spam,0.8336

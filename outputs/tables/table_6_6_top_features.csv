@@ -1,0 +1,21 @@
+Rank,LR spam token,LR spam coef,LR ham token,LR ham coef,NB spam token,NB spam log-ratio,NB ham token,NB ham log-ratio,SVM spam token,SVM spam weight,SVM ham token,SVM ham weight
+1,phonetoken,10.8353,ring ur,-3.3248,phonetoken,5.3143,lor,-4.4247,phonetoken,5.1611,got,-0.72
+2,brought,7.6349,got,-2.5298,phonetoken numtoken,4.8947,da,-4.2827,urltoken,2.6391,luton,-0.6862
+3,rgds,7.5997,home,-2.4377,claim,4.8055,later,-3.9065,mobile,1.6825,ll,-0.6707
+4,urltoken,7.1077,ring,-2.1304,prize,4.6311,really,-3.7461,numtoken,1.6328,liked,-0.6653
+5,arsenal,6.1231,don,-2.1241,nokia,4.3381,doing,-3.7315,moneytoken,1.5809,home,-0.647
+6,girls waiting,5.7257,face,-2.0809,box numtoken,4.1516,ask,-3.6864,tones,1.5002,way,-0.6406
+7,sale,5.0351,hey,-1.8585,numtoken cash,4.1516,lol,-3.6551,service,1.4778,ard,-0.5899
+8,ringtone,4.6676,ard,-1.8318,urltoken,4.1256,cos,-3.6551,wining,1.4643,later,-0.5801
+9,freephone,4.3952,wan,-1.6104,ppm,4.0715,said,-3.6391,uk,1.4121,hey,-0.5761
+10,freephone numtoken,4.3952,say,-1.599,numtoken phonetoken,4.0433,sure,-3.5551,txt,1.3818,sorry,-0.5744
+11,number numtoken,4.2665,em,-1.53,tone,4.0433,come,-3.5254,sexy,1.3639,ok,-0.5598
+12,divorce,4.1318,place,-1.4759,numtoken prize,4.0144,thing,-3.5193,ringtone,1.3626,lor,-0.5466
+13,sms,4.1294,days,-1.4751,guaranteed,3.9845,morning,-3.501,reply,1.3475,fine,-0.5343
+14,choose,3.8528,na,-1.4642,numtoken ppm,3.9537,gonna,-3.3832,darling,1.2163,fullonsms,-0.5167
+15,girls,3.8065,hi,-1.4487,cs,3.922,feel,-3.3832,arsenal,1.206,think,-0.5135
+16,text,3.364,good news,-1.4457,won moneytoken,3.7838,sorry,-3.3727,text,1.1649,wat,-0.5122
+17,uk,3.2819,people,-1.419,tones,3.7838,going,-3.3406,link,1.1463,finish,-0.4946
+18,message,3.2301,doing,-1.3589,pobox,3.7461,oh,-3.3297,filthy,1.1433,said,-0.4941
+19,latest news,3.1703,da,-1.3449,ringtone,3.666,dun,-3.3187,stories,1.1433,wan,-0.48
+20,service,3.0876,sorry,-1.3282,landline,3.666,gud,-3.2962,games,1.117,going,-0.4689

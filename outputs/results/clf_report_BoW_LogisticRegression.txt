@@ -1,0 +1,10 @@
+BoW + LR - classification report on the test set (n=1032)
+
+              precision    recall  f1-score   support
+
+         ham     0.9934    0.9978    0.9956       904
+        spam     0.9839    0.9531    0.9683       128
+
+    accuracy                         0.9922      1032
+   macro avg     0.9886    0.9755    0.9819      1032
+weighted avg     0.9922    0.9922    0.9922      1032

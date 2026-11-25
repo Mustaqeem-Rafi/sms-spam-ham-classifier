@@ -1,0 +1,6 @@
+source,description,text,predicted,score
+Written by the team (not from the dataset),Prize / premium-rate lure,"Congratulations! You won a £1000 voucher, call 09061234567 now to claim",spam,1.0
+Written by the team (not from the dataset),Casual personal message,"Hey, are we still meeting at 5?",ham,0.0002
+Written by the team (not from the dataset),One-time password notice,Your OTP for login is 482913. Do not share it with anyone.,spam,0.9704
+Written by the team (not from the dataset),Delivery notice with URL,Your parcel is out for delivery today. Track it at www.example-courier.com/track,spam,0.5995
+Written by the team (not from the dataset),Casual message containing 'free',"I got a free ticket for the match tonight, want to come with me?",ham,0.0001

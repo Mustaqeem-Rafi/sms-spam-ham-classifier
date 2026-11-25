@@ -1,0 +1,102 @@
+{
+  "lr_model": "BoW_LogisticRegression",
+  "nb_model": "BoW_MultinomialNB",
+  "svm_model": "TF-IDF_LinearSVM",
+  "best_model": "BoW_LogisticRegression",
+  "best_top_spam": [
+    "phonetoken",
+    "brought",
+    "rgds",
+    "urltoken",
+    "arsenal",
+    "girls waiting",
+    "sale",
+    "ringtone",
+    "freephone",
+    "freephone numtoken"
+  ],
+  "best_top_ham": [
+    "ring ur",
+    "got",
+    "home",
+    "ring",
+    "don",
+    "face",
+    "hey",
+    "ard",
+    "wan",
+    "say"
+  ],
+  "lr_top_spam": [
+    "phonetoken",
+    "brought",
+    "rgds",
+    "urltoken",
+    "arsenal",
+    "girls waiting",
+    "sale",
+    "ringtone",
+    "freephone",
+    "freephone numtoken"
+  ],
+  "nb_top_spam": [
+    "phonetoken",
+    "phonetoken numtoken",
+    "claim",
+    "prize",
+    "nokia",
+    "box numtoken",
+    "numtoken cash",
+    "urltoken",
+    "ppm",
+    "numtoken phonetoken"
+  ],
+  "svm_top_spam": [
+    "phonetoken",
+    "urltoken",
+    "mobile",
+    "numtoken",
+    "moneytoken",
+    "tones",
+    "service",
+    "wining",
+    "uk",
+    "txt"
+  ],
+  "lr_top_ham": [
+    "ring ur",
+    "got",
+    "home",
+    "ring",
+    "don",
+    "face",
+    "hey",
+    "ard",
+    "wan",
+    "say"
+  ],
+  "nb_top_ham": [
+    "lor",
+    "da",
+    "later",
+    "really",
+    "doing",
+    "ask",
+    "lol",
+    "cos",
+    "said",
+    "sure"
+  ],
+  "svm_top_ham": [
+    "got",
+    "luton",
+    "ll",
+    "liked",
+    "home",
+    "way",
+    "ard",
+    "later",
+    "hey",
+    "sorry"
+  ]
+}

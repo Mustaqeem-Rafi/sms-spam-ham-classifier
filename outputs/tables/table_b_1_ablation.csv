@@ -1,0 +1,6 @@
+Variant,Description,CV F1 mean,CV F1 std,Test F1,Vocabulary
+(a),Full preprocessing (main pipeline),0.9427,0.022,0.9683,5612
+(b),No stop-word removal,0.9376,0.0218,0.9555,9932
+(c),No number/URL/currency normalisation,0.9135,0.0289,0.9512,5211
+(d),Full preprocessing + Porter stemming,0.942,0.02,0.9639,5423
+(e),"Raw text, lowercasing only",0.9131,0.021,0.9274,10007
