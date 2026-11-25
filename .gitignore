@@ -1,0 +1,12 @@
+# environment
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+# raw data is downloaded by src/data.py (UCI, CC BY 4.0)
+data/raw/
+# local logs
+outputs/results/pip_install.log
+# LibreOffice lock files
+.~lock.*

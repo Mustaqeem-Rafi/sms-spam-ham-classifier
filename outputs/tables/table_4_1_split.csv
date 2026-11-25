@@ -1,0 +1,5 @@
+Subset,Records,Percent,Ham,Spam,Spam_percent,Note
+Training,4128,80.0,3614,514,12.45,Used to fit the final model (vectorizer + classifier)
+Validation,825-826 per fold,16.01,722-723,102-103,12.45,Validation: 5-fold CV within training set (each fold held out once)
+Testing,1032,20.0,904,128,12.4,Held-out; used once for final evaluation
+Total,5160,100.0,4518,642,12.44,After deduplication

@@ -1,0 +1,20 @@
+{
+  "n_raw": 5574,
+  "raw_class_counts": {
+    "ham": 4827,
+    "spam": 747
+  },
+  "missing_values": 0,
+  "n_html_entity_messages": 309,
+  "n_duplicates_removed": 414,
+  "duplicates_by_class": {
+    "ham": 309,
+    "spam": 105
+  },
+  "n_texts_with_conflicting_labels": 0,
+  "n_clean": 5160,
+  "clean_class_counts": {
+    "ham": 4518,
+    "spam": 642
+  }
+}

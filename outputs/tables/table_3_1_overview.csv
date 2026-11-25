@@ -1,0 +1,14 @@
+Attribute,Value
+Dataset name,SMS Spam Collection
+Source,UCI Machine Learning Repository
+URL,https://archive.ics.uci.edu/dataset/228/sms+spam+collection
+Records (raw),"5,574"
+Records (after removing duplicates),"5,160"
+Class counts (raw),"ham 4,827; spam 747"
+Class counts (after removing duplicates),"ham 4,518; spam 642"
+Features,1 text input (message) + 1 target
+Target variable,"label (ham / spam), encoded ham = 0, spam = 1"
+Task,Binary text classification
+File format,"Tab-separated text file (label<TAB>message), no header, UTF-8"
+Missing values,0
+Date accessed,25 November 2026

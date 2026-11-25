@@ -1,0 +1,10 @@
+Attribute,Data type,Description,Role
+label,Categorical (string),Class of the message: 'ham' (legitimate) or 'spam',Original - target
+text,Text (string),Raw SMS message content,Original - input
+target,Integer (0/1),"Encoded label: ham = 0, spam = 1",Derived - target
+n_chars,Integer,Number of characters in the message,Derived (EDA only)
+n_words,Integer,Number of whitespace-separated words,Derived (EDA only)
+n_digits,Integer,Number of digit characters (0-9),Derived (EDA only)
+n_upper,Integer,Number of uppercase letters,Derived (EDA only)
+has_url,Binary (0/1),1 if the message contains a URL (http... or www.),Derived (EDA only)
+has_currency,Binary (0/1),"1 if the message contains a currency symbol (£, $, €)",Derived (EDA only)

@@ -1,0 +1,7 @@
+Class,Feature,Mean,Median,Std,Min,Max
+ham,Characters,70.43,52.0,55.95,2,910
+ham,Words,14.23,11.0,11.16,1,171
+ham,Digits,0.3,0.0,1.02,0,23
+spam,Characters,137.41,148.0,29.98,13,223
+spam,Words,23.7,25.0,5.97,2,35
+spam,Digits,15.44,16.0,8.94,0,47

@@ -1,0 +1,264 @@
+{
+  "n_raw": 5574,
+  "n_clean": 5160,
+  "raw_class_counts": {
+    "ham": 4827,
+    "spam": 747
+  },
+  "clean_class_counts": {
+    "ham": 4518,
+    "spam": 642
+  },
+  "raw_spam_pct": 13.4,
+  "spam_pct": 12.44,
+  "ham_pct": 87.56,
+  "imbalance_ratio_ham_per_spam": 7.04,
+  "missing_values": 0,
+  "n_duplicates_removed": 414,
+  "duplicates_by_class": {
+    "ham": 309,
+    "spam": 105
+  },
+  "duplicates_pct_of_raw": 7.43,
+  "n_html_entity_messages": 309,
+  "n_texts_with_conflicting_labels": 0,
+  "mean_chars": {
+    "ham": 70.43,
+    "spam": 137.41
+  },
+  "median_chars": {
+    "ham": 52.0,
+    "spam": 148.0
+  },
+  "mean_words": {
+    "ham": 14.23,
+    "spam": 23.7
+  },
+  "median_words": {
+    "ham": 11.0,
+    "spam": 25.0
+  },
+  "mean_digits": {
+    "ham": 0.3,
+    "spam": 15.44
+  },
+  "median_digits": {
+    "ham": 0.0,
+    "spam": 16.0
+  },
+  "mean_upper": {
+    "ham": 3.97,
+    "spam": 15.15
+  },
+  "max_chars": 910,
+  "pct_with_digits": {
+    "ham": 15.83,
+    "spam": 93.93
+  },
+  "pct_with_url": {
+    "ham": 0.02,
+    "spam": 13.86
+  },
+  "pct_with_currency": {
+    "ham": 0.42,
+    "spam": 33.33
+  },
+  "pct_over_160_chars": {
+    "ham": 3.94,
+    "spam": 7.79
+  },
+  "pct_over_200_chars": {
+    "ham": 2.12,
+    "spam": 0.16
+  },
+  "pct_5plus_digit_run": {
+    "ham": 0.07,
+    "spam": 76.48
+  },
+  "vocab_size_eda": 7440,
+  "vocab_size_ham": 6469,
+  "vocab_size_spam": 1858,
+  "vocab_spam_only": 971,
+  "total_tokens": {
+    "ham": 31577,
+    "spam": 11333
+  },
+  "mean_tokens_per_msg": {
+    "ham": 6.99,
+    "spam": 17.65
+  },
+  "top20_ham": [
+    [
+      "numtoken",
+      1122
+    ],
+    [
+      "just",
+      282
+    ],
+    [
+      "ok",
+      256
+    ],
+    [
+      "ll",
+      233
+    ],
+    [
+      "got",
+      228
+    ],
+    [
+      "know",
+      226
+    ],
+    [
+      "like",
+      224
+    ],
+    [
+      "good",
+      217
+    ],
+    [
+      "come",
+      215
+    ],
+    [
+      "ur",
+      203
+    ],
+    [
+      "time",
+      193
+    ],
+    [
+      "day",
+      191
+    ],
+    [
+      "love",
+      186
+    ],
+    [
+      "going",
+      164
+    ],
+    [
+      "want",
+      162
+    ],
+    [
+      "lor",
+      159
+    ],
+    [
+      "home",
+      156
+    ],
+    [
+      "need",
+      155
+    ],
+    [
+      "don",
+      151
+    ],
+    [
+      "da",
+      142
+    ]
+  ],
+  "top20_spam": [
+    [
+      "numtoken",
+      2108
+    ],
+    [
+      "phonetoken",
+      635
+    ],
+    [
+      "moneytoken",
+      267
+    ],
+    [
+      "free",
+      192
+    ],
+    [
+      "txt",
+      135
+    ],
+    [
+      "ur",
+      119
+    ],
+    [
+      "stop",
+      116
+    ],
+    [
+      "text",
+      108
+    ],
+    [
+      "mobile",
+      107
+    ],
+    [
+      "reply",
+      96
+    ],
+    [
+      "claim",
+      95
+    ],
+    [
+      "urltoken",
+      89
+    ],
+    [
+      "prize",
+      79
+    ],
+    [
+      "just",
+      66
+    ],
+    [
+      "cash",
+      64
+    ],
+    [
+      "new",
+      64
+    ],
+    [
+      "send",
+      59
+    ],
+    [
+      "won",
+      58
+    ],
+    [
+      "urgent",
+      57
+    ],
+    [
+      "nokia",
+      56
+    ]
+  ],
+  "corr_with_target": {
+    "n_chars": 0.3825,
+    "n_words": 0.2814,
+    "n_digits": 0.835,
+    "n_upper": 0.3151,
+    "has_url": 0.349,
+    "has_currency": 0.5232
+  },
+  "corr_chars_words": 0.9742,
+  "empty_after_cleaning": 2
+}

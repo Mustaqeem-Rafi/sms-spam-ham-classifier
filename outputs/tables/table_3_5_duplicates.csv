@@ -1,0 +1,4 @@
+Class,Before,Duplicates removed,After,Percent removed
+ham,4827,309,4518,6.4
+spam,747,105,642,14.06
+total,5574,414,5160,7.43

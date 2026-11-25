@@ -1,0 +1,11 @@
+Column,dtype
+label,str
+target,int64
+text,str
+text_clean,str
+n_chars,int64
+n_words,int64
+n_digits,int64
+n_upper,int64
+has_url,int64
+has_currency,int64

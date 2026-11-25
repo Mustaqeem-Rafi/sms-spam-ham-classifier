@@ -1,0 +1,7 @@
+Training set: 4128 messages; test set: 1032 (test is not touched here)
+  BoW_MultinomialNB            CV F1 = 0.9442 ± 0.0278 | {'clf__alpha': 1.0, 'vec__min_df': 2, 'vec__ngram_range': (1, 2)} | 1.7s
+  BoW_LogisticRegression       CV F1 = 0.9427 ± 0.0220 | {'clf__C': 100, 'clf__class_weight': 'balanced', 'vec__min_df': 2, 'vec__ngram_range': (1, 2)} | 1.2s
+  BoW_LinearSVM                CV F1 = 0.9438 ± 0.0260 | {'clf__C': 0.1, 'clf__class_weight': 'balanced', 'vec__min_df': 2, 'vec__ngram_range': (1, 2)} | 1.3s
+  TF-IDF_MultinomialNB         CV F1 = 0.9489 ± 0.0184 | {'clf__alpha': 0.1, 'vec__min_df': 1, 'vec__ngram_range': (1, 2), 'vec__sublinear_tf': False} | 1.4s
+  TF-IDF_LogisticRegression    CV F1 = 0.9491 ± 0.0210 | {'clf__C': 10, 'clf__class_weight': 'balanced', 'vec__min_df': 1, 'vec__ngram_range': (1, 1), 'vec__sublinear_tf': True} | 2.2s
+  TF-IDF_LinearSVM             CV F1 = 0.9513 ± 0.0220 | {'clf__C': 1, 'clf__class_weight': 'balanced', 'vec__min_df': 1, 'vec__ngram_range': (1, 1), 'vec__sublinear_tf': True} | 2.4s
